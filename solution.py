@@ -3,7 +3,7 @@ import sys
 import os
 
 from input import parse_input
-
+from output import Output, VehicleRides
 
 def process_data(data):
     print('processing data')
@@ -16,6 +16,16 @@ def produce_output(output):
 def main():
     data = parse_input(os.path.join('/home/cgalvezd/git/hashcode-2018', 'data','a_example.in'))
     #output = process_data(data)
+
+    r1 = VehicleRides()
+    r1.rides = [0]
+    r2 = VehicleRides()
+    r2.rides = [2, 1]
+
+    output = Output()
+    output.vehicle_rides = [r1, r2]
+    print(output)
+
     #produce_output(output)
 
 if __name__ == '__main__':
