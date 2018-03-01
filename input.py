@@ -18,13 +18,13 @@ class Ride(object):
         self.latest_finish = 0
         self.index = 0
 
-        self.distance = distance(self.start, self.end)
-        self.max_allowed_time = self.latest_finish - self.earliest_start
-        self.buffer_time = self.max_allowed_time - self.distance
+        self.distance = 0
+        self.max_allowed_time = 0
+        self.buffer_time = 0
 
     def is_feasible(self, start_time):
         """Return true if the ride can be taken at the given start_time."""
-        if start_time < self.earliest_start:
+        if start_time <= self.earliest_start:
             return True
         else:
             return (start_time - self.earliest_start) <= self.buffer_time
@@ -57,9 +57,13 @@ def parse_input(input_file):
             ride.latest_finish = int(tokens_ride[5])
             ride.index = i
 
+            ride.distance = distance(ride.start, ride.end)
+            ride.max_allowed_time = ride.latest_finish - ride.earliest_start
+            ride.buffer_time = ride.max_allowed_time - ride.distance
+
             input_data.rides.append(ride)
 
         # Sort rides according to start time
-        input_data.rides = sorted(input_data.rides, key=lambda ride: ride.earliest_start)
+        input_data.rides = sorted(input_data.rides, key=lambda ride: ride.latest_finish)
 
     return input_data

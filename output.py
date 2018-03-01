@@ -36,7 +36,7 @@ def create_output(input_data):
     while np.any(remaining_rides):
         vehicle_found_ride = [True for _ in range(len(vehicles))]
 
-        for vehicle, vehicle_idx in enumerate(vehicles):
+        for vehicle_idx, vehicle in enumerate(vehicles):
             # Find best ride for vehicle
             best_ride_idx = get_best_ride(remaining_rides, input_data.rides, vehicle)
 
@@ -49,7 +49,7 @@ def create_output(input_data):
 
                 vehicle.rides.append(input_data.rides[best_ride_idx].index)
                 vehicle.time_counter += d_vehicle_ride_start +                 \
-                                        max(0, best_ride.start - time_start) + \
+                                        max(0, best_ride.earliest_start - time_start) + \
                                         best_ride.distance
                 vehicle.position = best_ride.end
                 vehicle.last_visited_index_sorted = best_ride_idx
@@ -63,20 +63,24 @@ def create_output(input_data):
             # No vehicle found feasible ride
             break
 
+    output = Output()
+    output.vehicle_rides = vehicles
+    return output
+
 def get_best_ride(remaining_rides, all_rides_sorted, vehicle):
     # Get index to the first ride in the future
     first_ride_in_future_idx = -1
     for i in range(vehicle.last_visited_index_sorted, len(all_rides_sorted)):
         ride = all_rides_sorted[i]
 
-        if ride.start_time >= vehicle.time_counter:
+        if ride.earliest_start >= vehicle.time_counter:
             first_ride_in_future_idx = i
             break
 
     # Find best ride for vehicle at this point in time
     best_ride_idx = -1
     best_score = -1
-    for i in range(first_ride_in_future_idx, min(first_ride_in_future_idx + 100, len(all_rides_sorted)-1)):
+    for i in range(len(all_rides_sorted)):
         ride_i = all_rides_sorted[i]
 
         score = compute_vehicle_ride_score(vehicle, ride_i, i, remaining_rides)
@@ -97,20 +101,7 @@ def compute_vehicle_ride_score(vehicle, ride, ride_idx_sorted, remaining_rides):
     if not remaining_rides[ride_idx_sorted] or not ride.is_feasible(time_start):
         score = -10
     else:
-        time_waiting = max(0, ride.start - time_start)
-        score = 1.0 / (d_vehicle_ride_start + time_waiting)
+        time_waiting = max(0, ride.earliest_start - time_start)
+        score = 1.0 / (d_vehicle_ride_start + time_waiting + 1e-08)
 
     return score
-
-
-
-
-
-    r1 = Vehicle()
-    r1.rides = [0]
-    r2 = Vehicle()
-    r2.rides = [2, 1]
-
-    output = Output()
-    output.vehicle_rides = [r1, r2]
-    return output

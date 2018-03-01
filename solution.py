@@ -7,11 +7,10 @@ from output import create_output
 
 
 def main():
-    data = parse_input(os.path.join('/home/cgalvezd/git/hashcode-2018', 'data','b_should_be_easy.in'))
-    solution = create_output(data)
-    print(solution)
-
-    #produce_output(output)
+    filepath = sys.argv[1]
+    data = parse_input(filepath)
+    solution = str(create_output(data))
+    print(solution[:-1])
 
 if __name__ == '__main__':
     main()
