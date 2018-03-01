@@ -1,2 +1,8 @@
 __pycache__
 *.pyc
+
+/data
+
+*.out
+*.zip
+
