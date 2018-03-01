@@ -14,7 +14,7 @@ def produce_output(output):
 
 
 def main():
-    data = parse_input(os.path.join('/home/cgalvezd/git/hashcode-2018', 'data','a_example.in'))
+    data = parse_input(os.path.join('/home/cgalvezd/git/hashcode-2018', 'data','b_should_be_easy.in'))
     #output = process_data(data)
 
     r1 = VehicleRides()

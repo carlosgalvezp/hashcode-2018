@@ -1,3 +1,5 @@
+from util import distance
+
 class InputData(object):
     def __init__(self):
         self.rows = 0
@@ -14,6 +16,8 @@ class Ride(object):
         self.earliest_start = 0
         self.latest_finish = 0
 
+        self.distance = distance(self.start, self.end)
+        self.max_allowed_time = self.latest_finish - self.earliest_start
 
 # Vehicle drives one unit per step
 # vehicle can start new ride in the same step as previous ride finished,
